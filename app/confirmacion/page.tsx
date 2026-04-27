@@ -54,7 +54,7 @@ export default function ConfirmacionPage() {
               Ir al Dashboard
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
-          <button className="flex-1 bg-transparent border border-[#737973] text-[#061b0e] font-sans text-base py-3 px-6 rounded-lg hover:bg-[#f0eee9] transition-colors flex items-center justify-center gap-2">
+          <button type="button" className="flex-1 bg-transparent border border-[#737973] text-[#061b0e] font-sans text-base py-3 px-6 rounded-lg hover:bg-[#f0eee9] transition-colors flex items-center justify-center gap-2">
               <Download className="w-5 h-5" />
               Descargar Recibo
           </button>

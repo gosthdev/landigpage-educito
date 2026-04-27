@@ -1,5 +1,33 @@
+"use client";
+
+import type { FormEvent } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Lock, ArrowRight, CreditCard } from 'lucide-react';
+import { ArrowLeft, Lock, ArrowRight } from 'lucide-react';
+
+type FieldElement = HTMLInputElement | HTMLSelectElement;
+
+const clearValidity = (event: FormEvent<FieldElement>) => {
+  event.currentTarget.setCustomValidity('');
+};
+
+const setValidityMessage = (
+  event: FormEvent<FieldElement>,
+  messages: { missing: string; invalid?: string }
+) => {
+  const { validity } = event.currentTarget;
+
+  if (validity.valueMissing) {
+    event.currentTarget.setCustomValidity(messages.missing);
+    return;
+  }
+
+  if (validity.typeMismatch || validity.patternMismatch) {
+    event.currentTarget.setCustomValidity(messages.invalid ?? messages.missing);
+    return;
+  }
+
+  event.currentTarget.setCustomValidity(messages.invalid ?? messages.missing);
+};
 
 export default function BoletaPage() {
   return (
@@ -30,47 +58,47 @@ export default function BoletaPage() {
           <div className="lg:col-span-7 space-y-10">
             <section>
               <h2 className="font-serif text-2xl font-semibold text-[#1b1c19] border-b border-[#c3c8c1] pb-4 mb-6">Información de Facturación</h2>
-              <form className="space-y-6" action="/pago">
+              <form className="space-y-6" action="/pago" id="boleta-form">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="font-sans text-xs font-bold uppercase tracking-widest text-[#1b1c19]" htmlFor="firstName">Nombres</label>
-                    <input className="w-full bg-[#f0eee9] border border-[#c3c8c1] rounded p-3 font-sans text-base text-[#1b1c19] focus:border-[#061b0e] focus:ring-1 focus:ring-[#061b0e] outline-none transition-colors" id="firstName" name="firstName" placeholder="María Eugenia" type="text" required />
+                    <input className="w-full bg-[#f0eee9] border border-[#c3c8c1] rounded p-3 font-sans text-base text-[#1b1c19] focus:border-[#061b0e] focus:ring-1 focus:ring-[#061b0e] outline-none transition-colors" id="firstName" name="firstName" placeholder="María Eugenia" type="text" required onInvalid={(event) => setValidityMessage(event, { missing: 'Ingresa tus nombres.' })} onInput={clearValidity} />
                   </div>
                   <div className="space-y-2">
                     <label className="font-sans text-xs font-bold uppercase tracking-widest text-[#1b1c19]" htmlFor="lastName">Apellidos</label>
-                    <input className="w-full bg-[#f0eee9] border border-[#c3c8c1] rounded p-3 font-sans text-base text-[#1b1c19] focus:border-[#061b0e] focus:ring-1 focus:ring-[#061b0e] outline-none transition-colors" id="lastName" name="lastName" placeholder="Pérez" type="text" required />
+                    <input className="w-full bg-[#f0eee9] border border-[#c3c8c1] rounded p-3 font-sans text-base text-[#1b1c19] focus:border-[#061b0e] focus:ring-1 focus:ring-[#061b0e] outline-none transition-colors" id="lastName" name="lastName" placeholder="Pérez" type="text" required onInvalid={(event) => setValidityMessage(event, { missing: 'Ingresa tus apellidos.' })} onInput={clearValidity} />
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <label className="font-sans text-xs font-bold uppercase tracking-widest text-[#1b1c19]" htmlFor="email">Correo Electrónico</label>
-                  <input className="w-full bg-[#f0eee9] border border-[#c3c8c1] rounded p-3 font-sans text-base text-[#1b1c19] focus:border-[#061b0e] focus:ring-1 focus:ring-[#061b0e] outline-none transition-colors" id="email" name="email" placeholder="ma.eugenia@ejemplo.com" type="email" required />
+                  <input className="w-full bg-[#f0eee9] border border-[#c3c8c1] rounded p-3 font-sans text-base text-[#1b1c19] focus:border-[#061b0e] focus:ring-1 focus:ring-[#061b0e] outline-none transition-colors" id="email" name="email" placeholder="ma.eugenia@ejemplo.com" type="email" required onInvalid={(event) => setValidityMessage(event, { missing: 'Ingresa tu correo electrónico.', invalid: 'Ingresa un correo electrónico válido.' })} onInput={clearValidity} />
                 </div>
 
                 <div className="space-y-2">
                   <label className="font-sans text-xs font-bold uppercase tracking-widest text-[#1b1c19]" htmlFor="document">Documento de Identificación (DNI/Cédula)</label>
-                  <input className="w-full bg-[#f0eee9] border border-[#c3c8c1] rounded p-3 font-sans text-base text-[#1b1c19] focus:border-[#061b0e] focus:ring-1 focus:ring-[#061b0e] outline-none transition-colors" id="document" name="document" placeholder="12345678" type="text" required />
+                  <input className="w-full bg-[#f0eee9] border border-[#c3c8c1] rounded p-3 font-sans text-base text-[#1b1c19] focus:border-[#061b0e] focus:ring-1 focus:ring-[#061b0e] outline-none transition-colors" id="document" name="document" placeholder="12345678" type="text" inputMode="numeric" pattern="[0-9]{6,12}" required onInvalid={(event) => setValidityMessage(event, { missing: 'Ingresa tu documento de identificación.', invalid: 'Usa solo números (6 a 12 dígitos).' })} onInput={clearValidity} />
                 </div>
 
                 <div className="space-y-2">
                   <label className="font-sans text-xs font-bold uppercase tracking-widest text-[#1b1c19]" htmlFor="address">Dirección</label>
-                  <input className="w-full bg-[#f0eee9] border border-[#c3c8c1] rounded p-3 font-sans text-base text-[#1b1c19] focus:border-[#061b0e] focus:ring-1 focus:ring-[#061b0e] outline-none transition-colors" id="address" name="address" placeholder="Av. Principal 123" type="text" required />
+                  <input className="w-full bg-[#f0eee9] border border-[#c3c8c1] rounded p-3 font-sans text-base text-[#1b1c19] focus:border-[#061b0e] focus:ring-1 focus:ring-[#061b0e] outline-none transition-colors" id="address" name="address" placeholder="Av. Principal 123" type="text" required onInvalid={(event) => setValidityMessage(event, { missing: 'Ingresa tu dirección.' })} onInput={clearValidity} />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="space-y-2 md:col-span-2">
                     <label className="font-sans text-xs font-bold uppercase tracking-widest text-[#1b1c19]" htmlFor="city">Ciudad</label>
-                    <input className="w-full bg-[#f0eee9] border border-[#c3c8c1] rounded p-3 font-sans text-base text-[#1b1c19] focus:border-[#061b0e] focus:ring-1 focus:ring-[#061b0e] outline-none transition-colors" id="city" name="city" placeholder="Lima" type="text" required />
+                    <input className="w-full bg-[#f0eee9] border border-[#c3c8c1] rounded p-3 font-sans text-base text-[#1b1c19] focus:border-[#061b0e] focus:ring-1 focus:ring-[#061b0e] outline-none transition-colors" id="city" name="city" placeholder="Lima" type="text" required onInvalid={(event) => setValidityMessage(event, { missing: 'Ingresa tu ciudad.' })} onInput={clearValidity} />
                   </div>
                   <div className="space-y-2">
                     <label className="font-sans text-xs font-bold uppercase tracking-widest text-[#1b1c19]" htmlFor="zip">Código Postal</label>
-                    <input className="w-full bg-[#f0eee9] border border-[#c3c8c1] rounded p-3 font-sans text-base text-[#1b1c19] focus:border-[#061b0e] focus:ring-1 focus:ring-[#061b0e] outline-none transition-colors" id="zip" name="zip" placeholder="15001" type="text" required />
+                    <input className="w-full bg-[#f0eee9] border border-[#c3c8c1] rounded p-3 font-sans text-base text-[#1b1c19] focus:border-[#061b0e] focus:ring-1 focus:ring-[#061b0e] outline-none transition-colors" id="zip" name="zip" placeholder="15001" type="text" inputMode="numeric" pattern="[0-9]{4,10}" required onInvalid={(event) => setValidityMessage(event, { missing: 'Ingresa tu código postal.', invalid: 'Usa solo números (4 a 10 dígitos).' })} onInput={clearValidity} />
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <label className="font-sans text-xs font-bold uppercase tracking-widest text-[#1b1c19]" htmlFor="country">País / Región</label>
-                  <select className="w-full bg-[#f0eee9] border border-[#c3c8c1] rounded p-3 font-sans text-base text-[#1b1c19] focus:border-[#061b0e] focus:ring-1 focus:ring-[#061b0e] outline-none transition-colors appearance-none" id="country" name="country" required>
+                  <select className="w-full bg-[#f0eee9] border border-[#c3c8c1] rounded p-3 font-sans text-base text-[#1b1c19] focus:border-[#061b0e] focus:ring-1 focus:ring-[#061b0e] outline-none transition-colors appearance-none" id="country" name="country" required onInvalid={(event) => setValidityMessage(event, { missing: 'Selecciona tu país o región.' })} onInput={clearValidity}>
                     <option value="PE">Perú</option>
                     <option value="CO">Colombia</option>
                     <option value="CL">Chile</option>
@@ -78,8 +106,6 @@ export default function BoletaPage() {
                     <option value="AR">Argentina</option>
                   </select>
                 </div>
-                
-                <button type="submit" className="hidden" id="submit-boleta"></button>
               </form>
             </section>
           </div>
@@ -118,9 +144,10 @@ export default function BoletaPage() {
               </div>
 
               {/* CTA */}
-              <button 
-                onClick={() => document.getElementById('submit-boleta')?.click()}
+              <button
                 className="w-full bg-[#061b0e] text-white py-4 px-6 rounded font-sans text-xs font-bold tracking-widest uppercase hover:bg-[#364c3c] transition-colors flex justify-center items-center gap-2 group"
+                form="boleta-form"
+                type="submit"
               >
                   Proceder al Pago
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />

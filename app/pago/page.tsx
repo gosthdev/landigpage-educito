@@ -1,5 +1,33 @@
+"use client";
+
+import type { FormEvent } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Lock, CreditCard, HelpCircle } from 'lucide-react';
+
+type FieldElement = HTMLInputElement;
+
+const clearValidity = (event: FormEvent<FieldElement>) => {
+  event.currentTarget.setCustomValidity('');
+};
+
+const setValidityMessage = (
+  event: FormEvent<FieldElement>,
+  messages: { missing: string; invalid?: string }
+) => {
+  const { validity } = event.currentTarget;
+
+  if (validity.valueMissing) {
+    event.currentTarget.setCustomValidity(messages.missing);
+    return;
+  }
+
+  if (validity.typeMismatch || validity.patternMismatch) {
+    event.currentTarget.setCustomValidity(messages.invalid ?? messages.missing);
+    return;
+  }
+
+  event.currentTarget.setCustomValidity(messages.invalid ?? messages.missing);
+};
 
 export default function PagoPage() {
   return (
@@ -36,16 +64,16 @@ export default function PagoPage() {
             </div>
 
             {/* High-Fidelity Card Form */}
-            <form className="bg-[#f5f3ee] p-8 rounded-xl border border-[#e4e2dd] shadow-sm flex flex-col gap-6" action="/confirmacion">
+            <form className="bg-[#f5f3ee] p-8 rounded-xl border border-[#e4e2dd] shadow-sm flex flex-col gap-6" action="/confirmacion" id="pago-form">
               <div className="flex flex-col gap-2">
                 <label className="font-sans text-xs font-bold uppercase tracking-widest text-[#434843]" htmlFor="cardName">Nombre en la tarjeta</label>
-                <input className="w-full bg-[#fbf9f4] border border-[#c3c8c1] rounded-md px-4 py-3 font-sans text-base text-[#1b1c19] focus:border-[#061b0e] focus:ring-1 focus:ring-[#061b0e] transition-colors outline-none" id="cardName" placeholder="Como aparece en la tarjeta" type="text" required />
+                <input className="w-full bg-[#fbf9f4] border border-[#c3c8c1] rounded-md px-4 py-3 font-sans text-base text-[#1b1c19] focus:border-[#061b0e] focus:ring-1 focus:ring-[#061b0e] transition-colors outline-none" id="cardName" name="cardName" placeholder="Como aparece en la tarjeta" type="text" required onInvalid={(event) => setValidityMessage(event, { missing: 'Ingresa el nombre que aparece en la tarjeta.' })} onInput={clearValidity} />
               </div>
               
               <div className="flex flex-col gap-2 relative">
                 <label className="font-sans text-xs font-bold uppercase tracking-widest text-[#434843]" htmlFor="cardNumber">Número de tarjeta</label>
                 <div className="relative">
-                  <input className="w-full bg-[#fbf9f4] border border-[#c3c8c1] rounded-md pl-4 pr-12 py-3 font-sans text-base text-[#1b1c19] focus:border-[#061b0e] focus:ring-1 focus:ring-[#061b0e] transition-colors outline-none tracking-widest" id="cardNumber" placeholder="0000 0000 0000 0000" type="text" required />
+                  <input className="w-full bg-[#fbf9f4] border border-[#c3c8c1] rounded-md pl-4 pr-12 py-3 font-sans text-base text-[#1b1c19] focus:border-[#061b0e] focus:ring-1 focus:ring-[#061b0e] transition-colors outline-none tracking-widest" id="cardNumber" name="cardNumber" placeholder="0000 0000 0000 0000" type="text" inputMode="numeric" pattern="[0-9 ]{13,19}" required onInvalid={(event) => setValidityMessage(event, { missing: 'Ingresa el número de tu tarjeta.', invalid: 'Usa solo números y espacios (13 a 19 dígitos).' })} onInput={clearValidity} />
                   <CreditCard className="w-5 h-5 absolute right-4 top-1/2 -translate-y-1/2 text-[#737973]" />
                 </div>
               </div>
@@ -53,14 +81,14 @@ export default function PagoPage() {
               <div className="grid grid-cols-2 gap-6">
                 <div className="flex flex-col gap-2">
                   <label className="font-sans text-xs font-bold uppercase tracking-widest text-[#434843]" htmlFor="expiry">Vencimiento</label>
-                  <input className="w-full bg-[#fbf9f4] border border-[#c3c8c1] rounded-md px-4 py-3 font-sans text-base text-[#1b1c19] focus:border-[#061b0e] focus:ring-1 focus:ring-[#061b0e] transition-colors outline-none" id="expiry" placeholder="MM/AA" type="text" required />
+                  <input className="w-full bg-[#fbf9f4] border border-[#c3c8c1] rounded-md px-4 py-3 font-sans text-base text-[#1b1c19] focus:border-[#061b0e] focus:ring-1 focus:ring-[#061b0e] transition-colors outline-none" id="expiry" name="expiry" placeholder="MM/AA" type="text" inputMode="numeric" pattern="(0[1-9]|1[0-2])/[0-9]{2}" required onInvalid={(event) => setValidityMessage(event, { missing: 'Ingresa el vencimiento.', invalid: 'Usa el formato MM/AA.' })} onInput={clearValidity} />
                 </div>
                 <div className="flex flex-col gap-2 relative">
                   <label className="font-sans text-xs font-bold uppercase tracking-widest text-[#434843] flex justify-between" htmlFor="cvv">
                       CVV
                       <HelpCircle className="w-4 h-4 text-[#737973] hover:text-[#061b0e] cursor-help" />
                   </label>
-                  <input className="w-full bg-[#fbf9f4] border border-[#c3c8c1] rounded-md px-4 py-3 font-sans text-base text-[#1b1c19] focus:border-[#061b0e] focus:ring-1 focus:ring-[#061b0e] transition-colors outline-none" id="cvv" maxLength={4} placeholder="•••" type="password" required />
+                  <input className="w-full bg-[#fbf9f4] border border-[#c3c8c1] rounded-md px-4 py-3 font-sans text-base text-[#1b1c19] focus:border-[#061b0e] focus:ring-1 focus:ring-[#061b0e] transition-colors outline-none" id="cvv" name="cvv" maxLength={4} placeholder="•••" type="password" inputMode="numeric" pattern="[0-9]{3,4}" required onInvalid={(event) => setValidityMessage(event, { missing: 'Ingresa el CVV.', invalid: 'Usa 3 o 4 dígitos.' })} onInput={clearValidity} />
                 </div>
               </div>
 
@@ -69,8 +97,6 @@ export default function PagoPage() {
                 <Lock className="w-4 h-4 text-[#061b0e]" />
                 <span className="font-sans text-xs font-bold uppercase tracking-widest text-[#061b0e]">Encriptación Segura 256-bit</span>
               </div>
-
-              <button type="submit" className="hidden" id="submit-pago"></button>
             </form>
           </div>
 
@@ -103,9 +129,10 @@ export default function PagoPage() {
                 <span className="font-serif text-3xl font-semibold text-[#061b0e]">$89.00</span>
               </div>
 
-              <button 
-                onClick={() => document.getElementById('submit-pago')?.click()}
+              <button
                 className="w-full mt-4 bg-[#061b0e] text-white font-sans text-lg py-4 rounded-lg hover:bg-[#1b1c19] transition-colors flex justify-center items-center gap-2"
+                form="pago-form"
+                type="submit"
               >
                   <Lock className="w-4 h-4" />
                   Pagar $89.00
