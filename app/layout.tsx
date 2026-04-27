@@ -24,7 +24,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className={`${manrope.variable} ${notoSerif.variable}`}>{children}</body>
+      <body className={`${manrope.variable} ${notoSerif.variable} font-sans bg-[radial-gradient(circle_at_top_right,#f8d3bf_0%,#fbf7f1_36%),linear-gradient(180deg,#f9f3ea_0%,#fdf9f3_100%)] text-[#1f251f] min-h-screen antialiased`}>
+        {children}
+      </body>
     </html>
   );
 }
