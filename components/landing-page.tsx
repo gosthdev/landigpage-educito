@@ -241,7 +241,9 @@ export function LandingPage() {
                       <li key={item}>{item}</li>
                     ))}
                   </ul>
-                  <button type="button">{plan.cta}</button>
+                  <Link href="/boleta">
+                    <button type="button" className="w-full">{plan.cta}</button>
+                  </Link>
                 </article>
               ))}
             </div>
