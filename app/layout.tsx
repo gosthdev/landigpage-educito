@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Manrope, Noto_Serif } from "next/font/google";
-import "./globals.css";
+import "./tailwind.css";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -13,7 +13,7 @@ const notoSerif = Noto_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "Telar SAS | Landing",
+  title: "Telar SAS",
   description: "El futuro del arte textil digitalizado."
 };
 
