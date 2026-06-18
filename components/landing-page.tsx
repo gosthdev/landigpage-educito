@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { FormEvent, useEffect, useMemo, useState } from "react";
-import type { Feature, Plan, Testimonial } from "@/types/landing";
+import { useEffect, useMemo, useState } from "react";
+import type { Feature, Testimonial } from "@/types/landing";
 
 const features: Feature[] = [
   {
@@ -26,54 +26,11 @@ const features: Feature[] = [
   }
 ];
 
-const plans: Plan[] = [
-  {
-    id: "artesano",
-    title: "Artesano",
-    subtitle: "Para creadores individuales y pequenos estudios.",
-    monthlyPrice: "S/29",
-    yearlyPrice: "S/24",
-    cta: "Seleccionar Artesano",
-    features: [
-      "Inventario basico hasta 500 SKUs",
-      "Gestion de 1 taller",
-      "Soporte por email"
-    ]
-  },
-  {
-    id: "taller",
-    title: "Taller",
-    subtitle: "Para talleres en crecimiento y marcas emergentes.",
-    monthlyPrice: "S/89",
-    yearlyPrice: "S/74",
-    highlighted: true,
-    cta: "Seleccionar Taller",
-    features: [
-      "Inventario ilimitado",
-      "Multiples talleres y operarios",
-      "Analisis avanzados de produccion",
-      "Soporte prioritario"
-    ]
-  },
-  {
-    id: "industrial",
-    title: "Industrial",
-    subtitle: "Para fabricas y produccion a gran escala.",
-    monthlyPrice: "Custom",
-    yearlyPrice: "Custom",
-    cta: "Contactar Ventas",
-    features: [
-      "Todo lo del plan Taller",
-      "Integraciones ERP personalizadas",
-      "Gerente de cuenta dedicado"
-    ]
-  }
-];
 
 const testimonials: Testimonial[] = [
   {
     quote:
-      "Antes de Telar SAS pasaba mas tiempo buscando hilos que disenando. Ahora todo fluye con control y claridad.",
+      "Antes de pasaba mas tiempo buscando hilos que disenando. Ahora todo fluye con control y claridad.",
     author: "Elena Vargas",
     role: "Maestra Tejedora, Estudio Hebras",
     imageUrl:
@@ -89,13 +46,10 @@ const testimonials: Testimonial[] = [
   }
 ];
 
-type FormStatus = "idle" | "success" | "error";
-
 export function LandingPage() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [yearly, setYearly] = useState(false);
+
   const [activeTestimonial, setActiveTestimonial] = useState(0);
-  const [formStatus, setFormStatus] = useState<FormStatus>("idle");
 
   const activeItem = useMemo(
     () => testimonials[activeTestimonial],
@@ -110,37 +64,37 @@ export function LandingPage() {
     return () => clearInterval(timer);
   }, []);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    const email = String(form.get("email") ?? "").trim();
-
-    if (!email.includes("@")) {
-      setFormStatus("error");
-      return;
-    }
-
-    setFormStatus("success");
-    event.currentTarget.reset();
-  };
-
   return (
-    <div className="page-shell">
-      <header className="top-nav">
-        <div className="container nav-row">
-          <p className="brand">Telar SAS</p>
+    <div className="flex min-h-screen flex-col bg-[#fbf9f4] text-[#1b1c19] font-sans antialiased selection:bg-[#d0e9d4] selection:text-[#0b2013]">
+      <header className="sticky top-0 z-10 border-b border-[#e5e1da] bg-[#fdfbf7]">
+        <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-6 md:px-10">
+          <p className="cursor-pointer font-serif text-2xl font-bold tracking-tight text-[#1b3022]">
+            Telar
+          </p>
           <button
-            className="menu-toggle"
+            className="rounded-sm border border-[#e5e1da] px-4 py-2 text-[11px] font-bold uppercase tracking-[0.2em] text-[#1b3022] md:hidden"
             onClick={() => setMenuOpen((prev) => !prev)}
             aria-expanded={menuOpen}
             aria-label="Abrir menu"
           >
             Menu
           </button>
-          <nav className={`nav-links ${menuOpen ? "open" : ""}`}>
-            <Link href="#producto">Producto</Link>
-            <Link href="#pricing">Pricing</Link>
-            <button className="login-btn" type="button">
+          <nav
+            className={`flex flex-col items-start gap-3 pb-4 font-serif text-xs uppercase tracking-wide text-[#1b3022] md:flex md:flex-row md:items-center md:gap-8 md:pb-0 ${
+              menuOpen ? "flex" : "hidden"
+            }`}
+          >
+            <Link
+              className="border-b-2 border-[#1b3022] pb-1 font-bold"
+              href="#producto"
+            >
+              Producto
+            </Link>
+
+            <button
+              className="rounded-full bg-[#d0e9d4] px-6 py-2 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0b2013] transition-colors hover:bg-[#061b0e] hover:text-white"
+              type="button"
+            >
               Login
             </button>
           </nav>
@@ -148,28 +102,30 @@ export function LandingPage() {
       </header>
 
       <main>
-        <section className="hero" id="about">
-          <div className="hero-bg" aria-hidden="true">
-            <Image
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzqc5SdpAyLe2Ar7siGK9B4Vtuc4pO6gNSRHIFmEoauX8Ue7Q9T3hr7SufyTw_XQ39HV5XwMm0TEcfJ1J5YP4oxNiT5t9ue7war-X3VM86WSS4APvGN1CGZWY8Ksdi9pHiNi7g97ulslwP_JrWMK14cJ53FvPoOW2MuthKk6Sgqi11kcsfuoZ7sMQF3IA94zXZ-UUU6tFKiyZKsL1rkNiNyNNoWhY0hzR7PCUKXW10U6CHEieYzApSaV3yxivie76F6F2cfK5yeXU"
-              alt="Textura de tela"
-              fill
-              priority
-              sizes="100vw"
-            />
-          </div>
-          <div className="container hero-content">
-            <h1>El Futuro del Arte Textil Digitalizado</h1>
-            <p>
-              Para artesanos y fabricas con tecnologia de vanguardia que
-              respeta la tradicion.
+        <section
+          className="relative flex min-h-[760px] items-center justify-center overflow-hidden px-6 py-24 md:min-h-[870px]"
+          id="about"
+        >
+          <div
+            className="absolute inset-0 bg-gradient-to-b from-[#cfe2d4] via-[#e8f0e8] to-[#fbf9f4]"
+            aria-hidden="true"
+          />
+          <div className="relative mx-auto flex w-full max-w-5xl flex-col items-center text-center">
+            <h1 className="mb-6 text-balance font-serif text-5xl font-bold leading-tight text-[#1b3022] md:text-6xl">
+              El Futuro del Arte Textil Digitalizado
+            </h1>
+            <p className="mb-12 max-w-2xl text-balance text-lg text-[#434843]">
+              Gestiona tu taller, controla tu inventario y optimiza tu produccion.
             </p>
-            <div className="hero-actions">
-              <a className="primary-action" href="#contacto">
+            <div className="flex flex-col gap-4 sm:flex-row">
+              <a
+                className="rounded-sm bg-[#d0e9d4] px-8 py-4 text-xs font-bold uppercase tracking-[0.2em] text-[#0b2013] shadow-sm transition-colors hover:bg-[#061b0e] hover:text-white"
+                href="#contacto"
+              >
                 Empieza ahora
               </a>
               <button
-                className="secondary-action"
+                className="flex items-center justify-center gap-2 rounded-sm border border-[#c3c8c1] px-8 py-4 text-xs font-bold uppercase tracking-[0.2em] text-[#1b1c19] transition-colors hover:bg-[#f0eee9]"
                 type="button"
                 onClick={() =>
                   alert("Demo solicitada. Te contactaremos en menos de 24h.")
@@ -181,97 +137,67 @@ export function LandingPage() {
           </div>
         </section>
 
-        <section className="section" id="producto">
-          <div className="container">
-            <div className="section-heading">
-              <h2>La Fusion Perfecta</h2>
-              <p>
-                Herramientas disenadas para la complejidad de la produccion
-                textil.
+        <section className="bg-[#fbf9f4] px-6 py-24" id="producto">
+          <div className="mx-auto w-full max-w-6xl">
+            <div className="mb-16 text-center">
+              <h2 className="mb-4 font-serif text-4xl font-semibold text-[#1b3022]">
+                La Fusion Perfecta
+              </h2>
+              <p className="mx-auto max-w-2xl text-base text-[#434843]">
+                Herramientas disenadas meticulosamente para la complejidad de
+                la produccion textil.
               </p>
             </div>
-            <div className="feature-grid">
+            <div className="grid gap-8 md:grid-cols-3">
               {features.map((feature) => (
-                <article className="feature-card" key={feature.title}>
-                  <div className="chip">{feature.icon}</div>
-                  <h3>{feature.title}</h3>
-                  <p>{feature.description}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="section pricing" id="pricing">
-          <div className="container">
-            <div className="section-heading">
-              <h2>Inversion Transparente</h2>
-              <p>Planes que escalan con tus metas y tu ritmo de produccion.</p>
-            </div>
-            <div className="billing-switch" role="group" aria-label="Facturacion">
-              <button
-                type="button"
-                className={!yearly ? "active" : ""}
-                onClick={() => setYearly(false)}
-              >
-                Mensual
-              </button>
-              <button
-                type="button"
-                className={yearly ? "active" : ""}
-                onClick={() => setYearly(true)}
-              >
-                Anual (ahorras 17%)
-              </button>
-            </div>
-            <div className="pricing-grid">
-              {plans.map((plan) => (
                 <article
-                  className={`price-card ${plan.highlighted ? "highlighted" : ""}`}
-                  key={plan.id}
+                  className="group relative overflow-hidden rounded-sm border border-[#e4e2dd] bg-white p-10 transition-shadow hover:shadow-sm"
+                  key={feature.title}
                 >
-                  <h3>{plan.title}</h3>
-                  <p>{plan.subtitle}</p>
-                  <p className="price-value">
-                    {yearly ? plan.yearlyPrice : plan.monthlyPrice}
-                    {plan.monthlyPrice === "Custom" ? "" : " / mes"}
-                  </p>
-                  <ul>
-                    {plan.features.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                  <Link href="/boleta">
-                    <button type="button" className="w-full">{plan.cta}</button>
-                  </Link>
+                  <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-full bg-[#f5f3ee] font-bold text-[#1b3022]">
+                    {feature.icon}
+                  </div>
+                  <h3 className="mb-3 font-serif text-2xl font-semibold text-[#1b1c19]">
+                    {feature.title}
+                  </h3>
+                  <p className="text-base text-[#434843]">{feature.description}</p>
                 </article>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="section testimonial">
-          <div className="container testimonial-box">
-            <p className="quote">&quot;{activeItem.quote}&quot;</p>
-            <div className="author-row">
+
+
+        <section className="bg-[#fbf9f4] px-6 py-24">
+          <div className="mx-auto max-w-4xl text-center">
+            <span className="mb-6 block text-6xl text-[#4d6453]/20">“</span>
+            <p className="mb-10 font-serif text-3xl font-semibold leading-snug text-[#1b3022]">
+              &quot;{activeItem.quote}&quot;
+            </p>
+            <div className="flex items-center justify-center gap-4">
               <Image
                 src={activeItem.imageUrl}
                 alt={activeItem.author}
                 width={68}
                 height={68}
-                className="avatar"
+                className="rounded-full border-2 border-[#eae8e3]"
               />
-              <div>
-                <p className="author-name">{activeItem.author}</p>
-                <p className="author-role">{activeItem.role}</p>
+              <div className="text-left">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#1b1c19]">
+                  {activeItem.author}
+                </p>
+                <p className="text-sm text-[#434843]">{activeItem.role}</p>
               </div>
             </div>
-            <div className="carousel-controls">
+            <div className="mt-6 flex gap-2">
               {testimonials.map((_, index) => (
                 <button
                   type="button"
                   key={index}
-                  className={index === activeTestimonial ? "dot active" : "dot"}
+                  className={`h-2.5 w-2.5 rounded-full ${
+                    index === activeTestimonial ? "bg-[#1b3022]" : "bg-[#c3c8c1]"
+                  }`}
                   onClick={() => setActiveTestimonial(index)}
                   aria-label={`Ir al testimonio ${index + 1}`}
                 />
@@ -279,31 +205,7 @@ export function LandingPage() {
             </div>
           </div>
         </section>
-
       </main>
-
-      <footer className="footer">
-        <div className="container footer-grid">
-          <div>
-            <p className="brand">Telar SAS</p>
-            <p>2026 Telar SAS.</p>
-          </div>
-          <div>
-            <p className="footer-title">Legal</p>
-            <p>Privacy Policy</p>
-            <p>Terms of Service</p>
-          </div>
-          <div>
-            <p className="footer-title">Company</p>
-            <p>Contact Us</p>
-          </div>
-          <div>
-            <p className="footer-title">Social</p>
-            <p>Instagram</p>
-
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
