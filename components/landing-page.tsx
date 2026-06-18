@@ -91,12 +91,18 @@ export function LandingPage() {
               Producto
             </Link>
 
-            <button
-              className="rounded-full bg-[#d0e9d4] px-6 py-2 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0b2013] transition-colors hover:bg-[#061b0e] hover:text-white"
-              type="button"
+            <a
+              className="rounded-full px-6 py-2 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0b2013] transition-colors hover:bg-[#061b0e] hover:text-white"
+              href="https://develop.d3m7i735wdbsu6.amplifyapp.com/sign-in"
             >
-              Login
-            </button>
+              Iniciar sesion
+            </a>
+            <a
+              className="rounded-full bg-[#d0e9d4] px-6 py-2 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0b2013] transition-colors hover:bg-[#061b0e] hover:text-white"
+              href="https://develop.d3m7i735wdbsu6.amplifyapp.com/register"
+            >
+              Registrarse
+            </a>
           </nav>
         </div>
       </header>
@@ -120,7 +126,7 @@ export function LandingPage() {
             <div className="flex flex-col gap-4 sm:flex-row">
               <a
                 className="rounded-sm bg-[#d0e9d4] px-8 py-4 text-xs font-bold uppercase tracking-[0.2em] text-[#0b2013] shadow-sm transition-colors hover:bg-[#061b0e] hover:text-white"
-                href="#contacto"
+                href="https://develop.d3m7i735wdbsu6.amplifyapp.com/register"
               >
                 Empieza ahora
               </a>
