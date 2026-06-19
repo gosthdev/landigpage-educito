@@ -27,12 +27,12 @@ export default function RootLayout({
       <head>
         <link
           rel="preconnect"
-          href={process.env.NEXT_PUBLIC_MI_LINK}
+          href={process.env.NEXT_PUBLIC_REDIRECT_URL}
           crossOrigin="anonymous"
         />
         <link
           rel="dns-prefetch"
-          href={process.env.NEXT_PUBLIC_MI_LINK}
+          href={process.env.NEXT_PUBLIC_REDIRECT_URL}
         />
       </head>
       <body className={`${manrope.variable} ${notoSerif.variable} font-sans bg-[radial-gradient(circle_at_top_right,#f8d3bf_0%,#fbf7f1_36%),linear-gradient(180deg,#f9f3ea_0%,#fdf9f3_100%)] text-[#1f251f] min-h-screen antialiased`}>
