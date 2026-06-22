@@ -12,16 +12,33 @@ permissions:
   contents: read
 
 jobs:
+  resolve-environment:
+    runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.set-env.outputs.environment }}
+    steps:
+      - id: set-env
+        run: |
+          if [ "${{ github.ref_name }}" = "develop" ]; then
+            echo "environment=dev" >> $GITHUB_OUTPUT
+          elif [ "${{ github.ref_name }}" = "qa" ]; then
+            echo "environment=qa" >> $GITHUB_OUTPUT
+          elif [ "${{ github.ref_name }}" = "prod" ]; then
+            echo "environment=prod" >> $GITHUB_OUTPUT
+          else
+            echo "environment=dev" >> $GITHUB_OUTPUT
+          fi
+
   deploy:
     name: Deploy landing 
-    runs-on: ubuntu-latest
     needs: resolve-environment
     environment: ${{ needs.resolve-environment.outputs.environment }}
+    runs-on: ubuntu-latest
 
     env:
-      AWS_REGION: ${{ secrets.AWS_REGION }}
-      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
-      SSM_PREFIX: ${{ secrets.SSM_PREFIX }}
+      AWS_REGION: ${{ vars.AWS_REGION }}
+      AWS_ROLE_ARN: ${{ vars.AWS_ROLE_ARN }}
+      SSM_PREFIX: ${{ vars.SSM_PREFIX }}
 
     steps:
       - name: Checkout 
@@ -29,8 +46,6 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
-        with:
-          version: 10.12.1
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -44,25 +59,25 @@ jobs:
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v6
         with:
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: ${{ env.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Read config from SSM Parameter Store
         id: ssm
         run: |
           REDIRECT_URL=$(aws ssm get-parameter \
-            --name "${{ secrets.SSM_PREFIX }}/NEXT_PUBLIC_REDIRECT_URL" \
+            --name "${{ env.SSM_PREFIX }}/NEXT_PUBLIC_REDIRECT_URL" \
             --with-decryption \
             --query "Parameter.Value" \
             --output text)
 
           S3_BUCKET=$(aws ssm get-parameter \
-            --name "${{ secrets.SSM_PREFIX }}/LANDING_BUCKET_NAME" \
+            --name "${{ env.SSM_PREFIX }}/LANDING_BUCKET_NAME" \
             --query "Parameter.Value" \
             --output text)
 
           CF_DISTRIBUTION_ID=$(aws ssm get-parameter \
-            --name "${{ secrets.SSM_PREFIX }}/LANDING_DISTRIBUTION_ID" \
+            --name "${{ env.SSM_PREFIX }}/LANDING_DISTRIBUTION_ID" \
             --query "Parameter.Value" \
             --output text)
 
