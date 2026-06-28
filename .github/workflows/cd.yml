@@ -83,11 +83,12 @@ jobs:
 
           S3_BUCKET=$(aws ssm get-parameter \
             --name "${{ env.SSM_PREFIX }}/LANDING_BUCKET_NAME" \
+            --with-decryption \
             --query "Parameter.Value" \
             --output text)
-
           CF_DISTRIBUTION_ID=$(aws ssm get-parameter \
             --name "${{ env.SSM_PREFIX }}/LANDING_DISTRIBUTION_ID" \
+            --with-decryption \
             --query "Parameter.Value" \
             --output text)
 
