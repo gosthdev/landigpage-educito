@@ -6,6 +6,16 @@ on:
       - develop
       - qa
       - prod
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Target environment
+        required: true
+        type: choice
+        options:
+          - dev
+          - qa
+          - prod
 
 permissions:
   id-token: write  
