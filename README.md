@@ -1,34 +1,62 @@
-# Landing Page Telar (Next.js + TypeScript)
+# Telar Landing Page
 
-Proyecto migrado desde un borrador HTML a una landing funcional en Next.js con TypeScript.
+Landing page principal de **Telar**, construida con **Next.js (App Router)**, **TypeScript** y **CSS**.
 
-## Estructura creada
+## Tecnologías
+
+- Next.js
+- TypeScript
+- CSS
+
+## Requisitos
+
+- Node.js 22 (recomendado)
+- pnpm
+
+## Estructura del proyecto
 
 - `app/`: App Router de Next.js (`layout.tsx`, `page.tsx`, `globals.css`)
-- `components/`: componentes React de la landing (`landing-page.tsx`)
-- `types/`: tipos TypeScript para planes, features y testimonios
-- `home.html`: borrador original conservado como referencia
+- `components/`: Componentes React de la landing (`landing-page.tsx`)
+- `types/`: Tipos TypeScript para planes, features y testimonios
 
-## Funcionalidades incluidas
+## Levantamiento en local
 
-- Navegacion responsive con menu movil
-- Seccion de precios con cambio mensual/anual
-- Carrusel de testimonios automatico y con controles
-- Formulario de contacto con validacion basica
-
-## Ejecutar con pnpm
+Instala dependencias:
 
 ```bash
 pnpm install
+```
+
+Inicia el entorno de desarrollo:
+
+```bash
 pnpm dev
 ```
 
-Abrir: `http://localhost:3000`
+La aplicación quedará disponible en:
 
-## Comandos utiles
+```text
+http://localhost:3000
+```
+
+## Build de producción
+
+Genera el build:
 
 ```bash
 pnpm build
+```
+
+Inicia en modo producción:
+
+```bash
 pnpm start
+```
+
+## Calidad de código
+
+Ejecuta lint:
+
+```bash
 pnpm lint
 ```
