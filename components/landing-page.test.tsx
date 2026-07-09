@@ -7,7 +7,8 @@ import { LandingPage } from "@/components/landing-page";
 // next/image no funciona tal cual en jsdom: lo reemplazamos por un <img> simple.
 // Usamos React.createElement (sin JSX) para evitar problemas del parser dentro del mock.
 vi.mock("next/image", () => ({
-  default: (props: any) => {
+  default: (props: React.ImgHTMLAttributes<HTMLImageElement> & { fill?: boolean; priority?: boolean; sizes?: string }) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { fill, priority, sizes, ...rest } = props;
     return React.createElement("img", rest);
   },
